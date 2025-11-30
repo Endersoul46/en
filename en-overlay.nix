@@ -1,5 +1,5 @@
 self: super: {
-      en = ./default.nix  {
+      en = import ./default.nix  {
         inherit (super) lib rustPlatform fetchFromGitHub;
       };
       }
