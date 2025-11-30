@@ -13,8 +13,13 @@ pub enum NewCommands {
         #[arg(long, default_value = "github:nixos/nixpkgs/nixos-25.05")]
         nixpkgs: Option<String>,
 
-        #[arg(long,short , default_value_t = false)]
+        #[arg(long,short , default_value_t = true)]
         unfree: bool,
+
+        #[arg(long , default_value_t = true)]
+        package: bool,
+
+
 
         #[arg(
             long,

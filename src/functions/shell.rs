@@ -15,6 +15,7 @@ pub fn default_shell(
     name: String,
     nixpkgs: Option<String>,
     unfree: bool,
+    package: bool,
     pkgs: Option<Vec<String>>,
     env: Option<Vec<String>>,
     overlays: Option<Vec<String>>,
@@ -80,7 +81,11 @@ pub fn default_shell(
     writeln!(writer, "    in")?;
 
     writeln!(writer, "    {{")?;
-
+    if package {
+        writeln!(writer, "      packages = forEachSupportedSystem ({{ pkgs }}: {{")?;
+        writeln!(writer, "        default = pkgs.callPackage ./default.nix {{}};")?;
+        writeln!(writer, "      }});")?;
+    };
     writeln!(writer, "      devShells = forEachSupportedSystem (")?;
     writeln!(writer, "        {{ pkgs }}:")?;
     writeln!(writer, "        {{")?;
@@ -117,6 +122,7 @@ pub fn rust_shell(
     name: String,
     nixpkgs: Option<String>,
     unfree: bool,
+    package: bool,
     pkgs: Option<Vec<String>>,
     env: Option<Vec<String>>,
     overlays: Option<Vec<String>>,
@@ -190,7 +196,12 @@ pub fn rust_shell(
     writeln!(writer, "    in")?;
 
     writeln!(writer, "    {{")?;
-
+    if package {
+        writeln!(writer, "      packages = forEachSupportedSystem ({{ pkgs }}: {{")?;
+        writeln!(writer, "        default = pkgs.callPackage ./default.nix {{}};")?;
+        writeln!(writer, "      }});")?;
+    };
+ 
     writeln!(writer, "      overlays.default = final: prev: {{")?;
     writeln!(writer, "        rustToolchain =")?;
     writeln!(

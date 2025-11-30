@@ -31,13 +31,14 @@ fn main() {
     match cli.commands {
         BaseCommands::New { commands } => {
             match commands {
-                NewCommands::Shell { shell_type, name, nixpkgs, unfree, pkgs, env, overlays  } => {
+                NewCommands::Shell { shell_type, name, nixpkgs, unfree, package, pkgs, env, overlays  } => {
                     if let Some(shell) = shell_type {
                         match  shell {
                             types::ShellType::Rust => shell::rust_shell(
                                 name,
                                 nixpkgs,
                                 unfree,
+                                package,
                                 pkgs,
                                 env,
                                 overlays
@@ -49,6 +50,7 @@ fn main() {
                             name,
                             nixpkgs,
                             unfree,
+                            package,
                             pkgs,
                             env,
                             overlays
