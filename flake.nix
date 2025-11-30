@@ -38,6 +38,7 @@
       packages = forEachSupportedSystem ({ pkgs }: {
         default = pkgs.callPackage ./default.nix {};
       });
+      overlay = import ./en-overlay.nix;
       overlays.default = final: prev: {
         rustToolchain =
           with inputs.fenix.packages.${prev.stdenv.hostPlatform.system};
