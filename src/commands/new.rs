@@ -10,7 +10,7 @@ pub enum NewCommands {
         #[arg(long, short, default_value = "default")]
         name: String,
 
-        #[arg(long, default_value = "github:nixos/nixpkgs/nixos-25.05")]
+        #[arg(long, default_value = "github:nixos/nixpkgs/nixos-25.11")]
         nixpkgs: Option<String>,
 
         #[arg(long,short , default_value_t = true)]

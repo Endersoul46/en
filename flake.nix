@@ -10,7 +10,7 @@
   };
 
   outputs =
-    { self, ... }@inputs:
+    { self, nixpkgs, ... }@inputs:
 
     let
       supportedSystems = [
@@ -28,9 +28,10 @@
               inherit system;
               config.allowUnfree = true;
               overlays = [
+                inputs.self.overlays.rust
                 inputs.self.overlays.default
               ];
-            };
+           };
           }
         );
     in
@@ -38,13 +39,19 @@
       packages = forEachSupportedSystem ({ pkgs }: {
         default = pkgs.callPackage ./default.nix {};
       });
-      overlay = import ./en-overlay.nix;
-      overlays.default = final: prev: {
+
+    overlays.default = self: super: {
+      en = import ./default.nix  {
+        inherit (super) lib rustPlatform fetchFromGitHub;
+      };
+    };
+
+    overlays.rust = 
+      final: prev: {
         rustToolchain =
           with inputs.fenix.packages.${prev.stdenv.hostPlatform.system};
           combine (
-            with stable;
-            [
+            with stable; [
               clippy
               rustc
               cargo
@@ -53,12 +60,11 @@
             ]
           );
       };
-
       devShells = forEachSupportedSystem (
         { pkgs }:
         {
           default = pkgs.mkShell {
-            packages = with pkgs; [
+           packages = with pkgs; [
               rustToolchain
               openssl
               pkg-config
@@ -67,6 +73,7 @@
               cargo-watch
               rust-analyzer
             ];
+
             env = {
               # Required by rust-analyzer
               RUST_SRC_PATH = "${pkgs.rustToolchain}/lib/rustlib/src/rust/library";

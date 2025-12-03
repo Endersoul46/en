@@ -7,7 +7,7 @@ fn devenv_init() -> io::Result<()>{
         .write(true)
         .create_new(true)
         .open(".envrc")?;
-    writeln!(file, "use flake 2>&1 | nom")?;
+    writeln!(file, "use flake")?;
     Ok(())
 }
 
@@ -52,7 +52,7 @@ pub fn default_shell(
     writeln!(writer, "        \"aarch64-darwin\"")?;
     writeln!(writer, "      ];")?;
 
-    writeln!(writer, "      forEachSupportedSystem =")?;
+    writeln!(writer, "      forEachSystem =")?;
     writeln!(writer, "        f:")?;
     writeln!(
         writer,
@@ -82,11 +82,11 @@ pub fn default_shell(
 
     writeln!(writer, "    {{")?;
     if package {
-        writeln!(writer, "      packages = forEachSupportedSystem ({{ pkgs }}: {{")?;
+        writeln!(writer, "      packages = forEachSystem ({{ pkgs }}: {{")?;
         writeln!(writer, "        default = pkgs.callPackage ./default.nix {{}};")?;
         writeln!(writer, "      }});")?;
     };
-    writeln!(writer, "      devShells = forEachSupportedSystem (")?;
+    writeln!(writer, "      devShells = forEachSystem (")?;
     writeln!(writer, "        {{ pkgs }}:")?;
     writeln!(writer, "        {{")?;
     writeln!(writer, "          default = pkgs.mkShell {{")?;
@@ -166,7 +166,7 @@ pub fn rust_shell(
     writeln!(writer, "        \"aarch64-darwin\"")?;
     writeln!(writer, "      ];")?;
 
-    writeln!(writer, "      forEachSupportedSystem =")?;
+    writeln!(writer, "      forEachSystem =")?;
     writeln!(writer, "        f:")?;
     writeln!(
         writer,
@@ -181,7 +181,7 @@ pub fn rust_shell(
     };
 
     writeln!(writer, "              overlays = [")?;
-    writeln!(writer, "                inputs.self.overlays.default")?;
+    writeln!(writer, "                inputs.self.overlays.rust")?;
 
     if let Some(over) = overlays {
         for overlay in over {
@@ -197,12 +197,12 @@ pub fn rust_shell(
 
     writeln!(writer, "    {{")?;
     if package {
-        writeln!(writer, "      packages = forEachSupportedSystem ({{ pkgs }}: {{")?;
+        writeln!(writer, "      packages = forEachSystem ({{ pkgs }}: {{")?;
         writeln!(writer, "        default = pkgs.callPackage ./default.nix {{}};")?;
         writeln!(writer, "      }});")?;
     };
  
-    writeln!(writer, "      overlays.default = final: prev: {{")?;
+    writeln!(writer, "      overlays.rust = final: prev: {{")?;
     writeln!(writer, "        rustToolchain =")?;
     writeln!(
         writer,
@@ -220,7 +220,7 @@ pub fn rust_shell(
     writeln!(writer, "          );")?;
     writeln!(writer, "      }};\n")?;
 
-    writeln!(writer, "      devShells = forEachSupportedSystem (")?;
+    writeln!(writer, "      devShells = forEachSystem (")?;
     writeln!(writer, "        {{ pkgs }}:")?;
     writeln!(writer, "        {{")?;
     writeln!(writer, "          default = pkgs.mkShell {{")?;
