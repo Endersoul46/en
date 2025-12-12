@@ -1,6 +1,5 @@
-use crate::types;
 use clap::{Subcommand};
-
+use crate::types;
  #[derive(Subcommand, Debug)]
 pub enum NewCommands {
     Shell {
@@ -53,11 +52,13 @@ pub enum NewCommands {
 
 
     },
-    Module {
+}
+
+ #[derive(Subcommand, Debug)]
+pub enum SubNewCommands {
+   Module {
         #[arg(long, short, default_value = "default")]
         name: String,
-
-        module_type: types::ModuleType,
 
         #[arg(
             long,
@@ -86,5 +87,10 @@ pub enum NewCommands {
         )]
         pkgs: Option<Vec<String>>,
 
+
     },
+
+    Pkgs 
 }
+
+

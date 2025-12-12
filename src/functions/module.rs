@@ -4,7 +4,7 @@ use crate::types;
 
 pub fn default_module (
     name: String,
-    module_type: types::ModuleType,
+    module_type: bool,
     import: Vec<String>,
     outer_import: Option<Vec<String>>,
     pkgs: Option<Vec<String>>,
@@ -28,10 +28,11 @@ pub fn default_module (
     };
 
   //checks if home or nixos module 
-    match module_type {
-        types::ModuleType::NixOS => write!(writer, "  flake.nixosModules.{} = {{ ", name)?,
-        types::ModuleType::Home => write!(writer, "  flake.homeModules.{} = {{" , name)?,
-    };
+  if module_type {
+      write!(writer, "  flake.nixosModules.{} = {{ ", name)?;
+  }else{
+      write!(writer, "  flake.homeModules.{} = {{" , name)?;
+  }
     for i in import {
         write!(writer, "{}, ", i)?;
     };

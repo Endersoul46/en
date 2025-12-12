@@ -1,7 +1,8 @@
-use clap::{Parser, Subcommand};
-use en::{types::{self}};
-use en::commands::{new::NewCommands };
-use en::functions::{ module, shell, update};
+use clap::{Parser};
+use en::commands::{new::NewCommands, base::BaseCommands};
+use en::eval::new_eval::new_eval;
+use en::functions::{ module, shell, update, pkgs};
+use en::eval::{self, base_eval, new_eval};
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -10,16 +11,7 @@ struct Cli {
     commands: BaseCommands
 }
 
-#[derive(Subcommand, Debug)]
-enum BaseCommands {
-    New {
-        #[command(subcommand)]
-        commands: NewCommands
-    },
-
-    Update
-
-} 
+ 
 
 
 
@@ -29,44 +21,15 @@ enum BaseCommands {
 fn main() {
     let cli = Cli::parse();
     match cli.commands {
-        BaseCommands::New { commands } => {
-            match commands {
-                NewCommands::Shell { shell_type, name, nixpkgs, unfree, package, pkgs, env, overlays  } => {
-                    if let Some(shell) = shell_type {
-                        match  shell {
-                            types::ShellType::Rust => shell::rust_shell(
-                                name,
-                                nixpkgs,
-                                unfree,
-                                package,
-                                pkgs,
-                                env,
-                                overlays
-                            ).unwrap(),
+            BaseCommands::NixOS { commands } => {
+                base_eval::sub_base_eval(commands, true);
+            },
+            BaseCommands::Home { commands } => {
+                base_eval::sub_base_eval(commands, false);
+            },
+ 
+            BaseCommands::Update => update::update().expect("update failed"), 
 
-                        }; 
-                    } else {
-                        shell::default_shell(
-                            name,
-                            nixpkgs,
-                            unfree,
-                            package,
-                            pkgs,
-                            env,
-                            overlays
-                        ).unwrap()
-                    }
-                },
-                NewCommands::Module  { name, module_type, import, outer_import, pkgs } => 
-                    module::default_module(
-                        name,
-                        module_type,
-                        import,
-                        outer_import,
-                        pkgs
-                    ).unwrap(),
-            }
-        },
-        BaseCommands::Update => update::update().expect("update failed"), 
-    };
-}
+            BaseCommands::New { commands } => new_eval(commands),
+        }
+    }
