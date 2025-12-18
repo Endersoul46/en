@@ -6,13 +6,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "en";
-  version = "unstable-2025-12-12";
+  version = "unstable-2025-12-18";
 
   src = fetchFromGitHub {
     owner = "Endersoul46";
     repo = "en";
-    rev = "893ee07562e3d457225cc56602803e58ceace31e";
-    hash = "sha256-K1PGhSnuct3Kt7tyH30MwIzX7BpNwJQp9maDkRCBJ60=";
+    rev = "2dcf0eb8792462baa3cec55b012a071aa5e61c18";
+    hash = "sha256-lxml0ufoU8nKTQQ6Q8R4Hk87vaKKEPmnukNpiQMnTCA=";
   };
 
   cargoLock = {
