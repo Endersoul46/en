@@ -1,6 +1,7 @@
-
+use duct::{self, cmd};
 use std::io::{self, Write, BufWriter};
 use std::fs::OpenOptions;
+
 
 fn devenv_init() -> io::Result<()>{
     let mut file = OpenOptions::new()
@@ -8,6 +9,8 @@ fn devenv_init() -> io::Result<()>{
         .create_new(true)
         .open(".envrc")?;
     writeln!(file, "use flake")?;
+
+    cmd!("direnv","allow").reader()?;
     Ok(())
 }
 

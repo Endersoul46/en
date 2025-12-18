@@ -1,5 +1,5 @@
 use crate::commands::new::{NewCommands, SubNewCommands};
-use crate::functions::pkgs;
+use crate::functions::{pkgs,update};
 use clap::{Subcommand};
 
 #[derive(Subcommand, Debug)]
@@ -9,17 +9,22 @@ pub enum BaseCommands {
         commands: SubBaseCommands
     }, 
 
-    NixOS {
+    Nixos {
         #[command(subcommand)]
         commands: SubBaseCommands
     },
 
     Update,
 
+    Hostname,
+
+    Theme,
+
     New {
         #[command(subcommand)]
         commands: NewCommands
     }, 
+
 
 
 
@@ -47,7 +52,23 @@ impl SubBaseCommands {
                     command_type
                 ).unwrap(),
 
-            SubBaseCommands::Update => {}
+            SubBaseCommands::Update => {
+                if command_type {
+                    match update::nix_os_update() {
+                        Ok(_) => {},
+                        Err(_) => {
+                            println!("update failed, error:");
+                        }
+                    }
+                }else{
+                    match update::home_update(){
+                        Ok(_) => {},
+                        Err(_) => {
+                            println!("update failed, error:");
+                        }
+                    }
+                }
+            }
         }
 
     }
