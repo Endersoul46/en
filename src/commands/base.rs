@@ -16,7 +16,7 @@ pub enum BaseCommands {
 
     Update,
 
-    Hostname,
+    Host,
 
     Theme,
 

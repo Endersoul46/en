@@ -28,7 +28,7 @@ fn main() {
  
             BaseCommands::Update => update::update().expect("update failed"),
 
-            BaseCommands::Hostname => settings::change_hostname().expect("Hostname file not found"),
+            BaseCommands::Host => settings::change_hostname().expect("Hostname file not found"),
 
             BaseCommands::Theme => settings::change_theme().expect("Theme file not found"),
 

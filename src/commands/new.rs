@@ -74,6 +74,19 @@ impl NewCommands {
                             overlays
                         ).unwrap(),
 
+                        types::ShellType::Python => shell::python_shell(
+                            name,
+                            nixpkgs,
+                            Some("3.13".to_string()),
+                            unfree,
+                            package,
+                            pkgs,
+                            env,
+                            overlays
+                        ).unwrap(),
+
+
+
                     }; 
                 } else {
                     shell::default_shell(

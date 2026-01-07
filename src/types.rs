@@ -10,4 +10,5 @@ pub enum ModuleType {
 #[derive(ValueEnum,Clone, Debug)]
 pub enum ShellType {
     Rust,
+    Python,
 }
