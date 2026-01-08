@@ -22,7 +22,7 @@ pub enum NewCommands {
         #[arg(long,short , default_value_t = true)]
         unfree: bool,
 
-        #[arg(long , default_value_t = true)]
+        #[arg(long , default_value_t = false)]
         package: bool,
 
 
