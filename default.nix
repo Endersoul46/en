@@ -1,32 +1,23 @@
 {
   lib,
-  stdenv,
-  fetchFromGitHub,
-  cargo,
   rustPlatform,
-  rustc,
+  fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+rustPlatform.buildRustPackage rec {
   pname = "en";
   version = "unstable-2026-01-08";
 
   src = fetchFromGitHub {
     owner = "Pavedd";
     repo = "en";
-    rev = "6c29c2ffc23228934ebf5a19d005f8229b2c9779";
-    hash = "sha256-n8uu03hrJRNvx/ARLVliIjSEFF5o4IMKIFo4vPsRGZQ=";
+    rev = "8535ea23283e66f7748354d9de515c78edc23fc0";
+    hash = "sha256-AwcbQTbCkZJYD+7p79v2mIvE5DOB1RLjLutSVnvMNh4=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
+  cargoLock = {
     lockFile = ./Cargo.lock;
   };
-
-  nativeBuildInputs = [
-    cargo
-    rustPlatform.cargoSetupHook
-    rustc
-  ];
 
   meta = {
     description = "A rust cli Helper untility for my NixOS config";
@@ -34,6 +25,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ];
     mainProgram = "en";
-    platforms = lib.platforms.all;
   };
 }
